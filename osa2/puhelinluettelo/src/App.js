@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -11,9 +11,9 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService.getAll()
+      .then(res => {
+        setPersons(res)
       })
   }, [])
 
@@ -25,9 +25,18 @@ const App = () => {
     }
 
     if (persons.map(person => person.name).includes(newName)) {
-      alert(`${newName} is already in the phonebook`)
+      if (window.confirm(`${newName} is in the phonebook. Replace the number?`)) {
+        const personId = persons.find(person => person.name === newName)
+        personService.update(personId.id, personObject)
+          .then(res => {
+            setPersons(persons.map(person => person.id !== personId.id ? person : res))
+          })
+      }
     } else {
-      setPersons(persons.concat(personObject))
+      personService.create(personObject)
+        .then(res => {
+          setPersons(persons.concat(res))
+        })
     }
     setNewName('')
     setNewNumber('')
@@ -45,6 +54,15 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const removePerson = (id) => {
+    if (window.confirm('Poistetaanko')) {
+      personService.remove(id)
+        .then(res => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
@@ -52,7 +70,7 @@ const App = () => {
       <h1>Phonebook</h1>
 
       <h2>Filter the phonebook</h2>
-      <Filter filter={filter} handleFilterChange={handleFilterChange}/>
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
       <h2>Add a new number</h2>
       <PersonForm addNumber={addNumber}
@@ -62,7 +80,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons}/>
+      <Persons filteredPersons={filteredPersons} handleClick={removePerson} />
     </div>
   )
 
