@@ -1,9 +1,24 @@
 {
   "persons": [
     {
-      "name": "arto hellas",
-      "number": "123",
+      "name": "olli",
+      "number": "040123123",
+      "id": 1
+    },
+    {
+      "name": "arto",
+      "number": "1212312",
+      "id": 2
+    },
+    {
+      "name": "matti",
+      "number": "8976234",
       "id": 3
+    },
+    {
+      "name": "joku äijä",
+      "number": "9087234",
+      "id": 4
     }
   ]
 }
