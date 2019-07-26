@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState(null)
+  const [messageStyle, setMessageStyle] = useState('error')
 
   useEffect(() => {
     personService.getAll()
@@ -34,6 +35,7 @@ const App = () => {
             setPersons(persons.map(person => person.id !== personId.id ? person : res))
           })
         setMessage(`Henkilön ${newName} numero päivitetty`)
+        setMessageStyle('success')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
@@ -42,8 +44,13 @@ const App = () => {
       personService.create(personObject)
         .then(res => {
           setPersons(persons.concat(res))
+          setMessage(`Henkilö ${newName} lisätty puhelinluetteloon`)
+          setMessageStyle('success')
         })
-      setMessage(`Henkilö ${newName} lisätty puhelinluetteloon`)
+        .catch(error => {
+          setMessage(error.response.data.error)
+          setMessageStyle('error')
+        })
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -72,12 +79,14 @@ const App = () => {
         })
         .catch(error => {
           setMessage('Käyttäjän tiedot on jo poistettu')
+          setMessageStyle('error')
           setTimeout(() => {
             setMessage(null)
           }, 5000)
           setPersons(persons.filter(person => person.id !== id))
         })
       setMessage(`Poisto onnistui`)
+      setMessageStyle('success')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -85,11 +94,10 @@ const App = () => {
   }
 
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-
   return (
     <div>
 
-      <Notification message={message} />
+      <Notification message={message} style={messageStyle} />
 
       <h1>Phonebook</h1>
 

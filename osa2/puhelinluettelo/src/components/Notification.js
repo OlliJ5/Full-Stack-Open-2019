@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Notification = ({ message }) => {
+const Notification = ({message, style}) => {
   if (message === null) {
     return (
       null
     )
-  } else if (message === 'Käyttäjän tiedot on jo poistettu') {
+  } else if (style === 'error') {
     return (
       <div className="error">
         {message}
