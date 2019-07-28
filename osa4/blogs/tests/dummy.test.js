@@ -91,12 +91,41 @@ describe('favorite blog', () => {
 })
 
 describe('most blogs', () => {
-  test.only('finds the author with most blogs', () => {
+  test('finds the author with most blogs', () => {
     const result = listHelper.mostBlogs(blogs)
     const expectedOutput = {
       author: "Robert C. Martin",
       blogs: 3
     }
     expect(result).toEqual(expectedOutput)
+  })
+
+  test('return empty when given an empty blog list', () => {
+    const result = listHelper.mostBlogs([])
+    const expectedOutput = {
+      author: "",
+      blogs: 0
+    }
+    expect(result).toEqual(expectedOutput)
+  })
+
+  test('returns correctly with only one blog', () => {
+    const result = listHelper.mostBlogs(blogs.slice(0, 1))
+    const expectedOutput = {
+      author: "Michael Chan",
+      blogs: 1
+    }
+    expect(result).toEqual(expectedOutput)
+  })
+})
+
+describe('most likes', () => {
+  test('finds the author with most likes', () => {
+    const result = listHelper.mostLikes(blogs)
+    const expectedBlog = {
+      author: "Edsger W. Dijkstra",
+      likes: 17
+    }
+    expect(result).toEqual(expectedBlog)
   })
 })

@@ -21,39 +21,63 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return {
+      author: '',
+      blogs: 0
+    }
+  }
+
   const blogAmounts = blogs.reduce((blogAmounts, curr) => {
-    //console.log(blogAmounts, 'curr', curr)
     blogAmounts[curr.author] = blogAmounts[curr.author] + 1 || 1
     return blogAmounts
   }, {})
-  // .reduce((leader, curr) => {
-  //   console.log('leader', leader, 'curr', curr)
-  //   return leader > curr ? leader : curr
-  // }, {})
 
-  // function getKeyByValue(object, value) {
-  //   return Object.keys(object).find(key => object[key] === value);
-  // }
-
-  
   let mostBlogs = 0
-  
+
   Object.keys(blogAmounts).forEach((key, index) => {
     mostBlogs = mostBlogs > blogAmounts[key] ? mostBlogs : blogAmounts[key]
   })
-  
+
   const authorWithMostBlogs = Object.keys(blogAmounts).find(key => blogAmounts[key] === mostBlogs)
 
   return {
     author: authorWithMostBlogs,
     blogs: mostBlogs
   }
+}
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return {
+      author: '',
+      likes: 0
+    }
+  }
+
+  const likeAmounts = blogs.reduce((likeAmounts, curr) => {
+    likeAmounts[curr.author] = likeAmounts[curr.author] + curr.likes || curr.likes
+    return likeAmounts
+  }, {})
+
+  let mostLikes = 0
+
+  Object.keys(likeAmounts).forEach((key, index) => {
+    mostLikes = mostLikes > likeAmounts[key] ? mostLikes : likeAmounts[key]
+  })
+
+  const authorWithMostLikes = Object.keys(likeAmounts).find(key => likeAmounts[key] === mostLikes)
+
+  return {
+    author: authorWithMostLikes,
+    likes: mostLikes
+  }
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
