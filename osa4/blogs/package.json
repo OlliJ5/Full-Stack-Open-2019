@@ -4,9 +4,9 @@
   "description": "blog app",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
-    "start": "node index.js",
-    "watch": "nodemon index.js"
+    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "start": "NODE_ENV=production node index.js",
+    "watch": "NODE_ENV=development nodemon index.js"
   },
   "author": "Olli",
   "license": "ISC",
@@ -19,7 +19,8 @@
   "devDependencies": {
     "jest": "^24.8.0",
     "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
   },
   "jest": {
     "testEnvironment": "node"

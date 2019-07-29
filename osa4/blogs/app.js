@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
+const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
 
@@ -22,5 +23,7 @@ app.use(bodyParser.json())
 app.use(morgan('tiny'))
 
 app.use('/api/blogs', blogsRouter)
+
+app.use(middleware.errorHandler)
 
 module.exports = app
