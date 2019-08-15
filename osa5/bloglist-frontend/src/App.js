@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import BlogForm from './components/blogForm'
+import Togglable from './components/Togglable'
+import Blog from './components/Blog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -52,6 +55,32 @@ const App = () => {
       }, 5000)
 
     } catch (exception) {
+      console.log('error occured', exception)
+    }
+  }
+
+  const likeBlog = async (blog) => {
+    const user = blog.user
+    const blogObject = { ...blog, likes: blog.likes + 1, user: blog.user.id ? blog.user.id : blog.user }
+
+    try {
+      const newBlog = await blogService.update(blog.id, blogObject)
+      newBlog.user = user
+      setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : newBlog))
+    } catch (exception) {
+      console.log('error occured', exception)
+    }
+  }
+
+  const removeBlog = async (blog) => {
+    console.log('klikattu')
+    try {
+      const id = blog.id
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) { 
+        await blogService.remove(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      }
+    } catch(exception) {
       console.log('error occured', exception)
     }
   }
@@ -121,6 +150,8 @@ const App = () => {
 
   }
 
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+
   return (
     <div>
       <p>logged in as {user.name}</p>
@@ -130,37 +161,20 @@ const App = () => {
       </button>
       <h2>Create a new blog</h2>
       <Notification message={message} />
-      <form onSubmit={addBlog}>
-        <div>
-          title
-          <input
-            type="text"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author
-          <input
-            type="text"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url
-          <input
-            type="text"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
+      <Togglable buttonLabel="add a blog">
+        <BlogForm addBlog={addBlog}
+          title={title}
+          setTitle={setTitle}
+          author={author}
+          setAuthor={setAuthor}
+          url={url}
+          setUrl={setUrl}
+        />
+      </Togglable>
 
       <h2>blogs</h2>
 
-      {blogs.map(blog => <p key={blog.id}>{blog.title} by {blog.author}</p>)}
+      {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user} />)}
     </div>
   )
 }
