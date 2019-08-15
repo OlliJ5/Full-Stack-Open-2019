@@ -76,7 +76,7 @@ const App = () => {
     console.log('klikattu')
     try {
       const id = blog.id
-      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) { 
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
         await blogService.remove(id)
         setBlogs(blogs.filter(blog => blog.id !== id))
       }
