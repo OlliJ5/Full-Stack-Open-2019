@@ -5,16 +5,20 @@ import Notification from './components/Notification'
 import BlogForm from './components/blogForm'
 import Togglable from './components/Togglable'
 import Blog from './components/Blog'
+import { useField } from './hooks'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+
+  const titleField = useField('text')
+  const authorField = useField('text')
+  const urlField = useField('text')
+
+  const usernameField = useField('text')
+  const passwordField = useField('password')
 
   useEffect(() => {
     blogService
@@ -37,6 +41,9 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
+    const title = titleField.value
+    const author = authorField.value
+    const url = urlField.value
     const blogObject = {
       title,
       author,
@@ -46,9 +53,9 @@ const App = () => {
       const blog = await blogService.create(blogObject)
       setBlogs(blogs.concat(blog))
       setMessage(`A new blog '${title}' by '${author}' added`)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      titleField.reset()
+      authorField.reset()
+      urlField.reset()
 
       setTimeout(() => {
         setMessage(null)
@@ -80,7 +87,7 @@ const App = () => {
         await blogService.remove(id)
         setBlogs(blogs.filter(blog => blog.id !== id))
       }
-    } catch(exception) {
+    } catch (exception) {
       console.log('error occured', exception)
     }
   }
@@ -88,6 +95,8 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
+      const username = usernameField.value
+      const password = passwordField.value
       const user = await loginService.login({
         username, password
       })
@@ -102,8 +111,8 @@ const App = () => {
         setMessage(null)
       }, 5000)
 
-      setUsername('')
-      setPassword('')
+      usernameField.reset()
+      passwordField.reset()
     } catch (exception) {
       setMessage('Wrong username or password')
       setTimeout(() => {
@@ -127,19 +136,13 @@ const App = () => {
           <div>
             username
             <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
+              {...usernameField}
             />
           </div>
           <div>
             password
             <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
+              {...passwordField}
             />
           </div>
           <button type="submit">login</button>
@@ -163,12 +166,9 @@ const App = () => {
       <Notification message={message} />
       <Togglable buttonLabel="add a blog">
         <BlogForm addBlog={addBlog}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
+          titleField={titleField}
+          authorField={authorField}
+          urlField={urlField}
         />
       </Togglable>
 
