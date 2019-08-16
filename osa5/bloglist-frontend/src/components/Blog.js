@@ -12,7 +12,7 @@ const Blog = ({ blog, likeBlog, removeBlog, user }) => {
   }
   if (fullyVisible === false) {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog'>
         <div className='clickable' onClick={() => setFullyVisible(true)}>
           {blog.title} {blog.author}
         </div>
