@@ -41,9 +41,9 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
-    const title = titleField.value
-    const author = authorField.value
-    const url = urlField.value
+    const title = titleField.input.value
+    const author = authorField.input.value
+    const url = urlField.input.value
     const blogObject = {
       title,
       author,
@@ -95,8 +95,8 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const username = usernameField.value
-      const password = passwordField.value
+      const username = usernameField.input.value
+      const password = passwordField.input.value
       const user = await loginService.login({
         username, password
       })
@@ -136,13 +136,13 @@ const App = () => {
           <div>
             username
             <input
-              {...usernameField}
+              {...usernameField.input}
             />
           </div>
           <div>
             password
             <input
-              {...passwordField}
+              {...passwordField.input}
             />
           </div>
           <button type="submit">login</button>
@@ -166,9 +166,9 @@ const App = () => {
       <Notification message={message} />
       <Togglable buttonLabel="add a blog">
         <BlogForm addBlog={addBlog}
-          titleField={titleField}
-          authorField={authorField}
-          urlField={urlField}
+          titleField={titleField.input}
+          authorField={authorField.input}
+          urlField={urlField.input}
         />
       </Togglable>
 
