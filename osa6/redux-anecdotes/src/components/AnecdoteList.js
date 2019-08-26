@@ -6,11 +6,8 @@ import { notificationChange } from '../reducers/notificationReducer'
 const AnecdoteList = (props) => {
 
   const vote = (anecdote) => {
-    props.voteAnecdote(anecdote.id)
-    props.notificationChange(`You voted for anecdote ${anecdote.content}`)
-    setTimeout(() => {
-      props.notificationChange(null)
-    }, 5000)
+    props.voteAnecdote(anecdote)
+    props.notificationChange(`You voted for anecdote ${anecdote.content}`, 3)
   }
 
   return (
@@ -34,10 +31,9 @@ const anecdotesToShow = ({ anecdotes, filter }) => {
   const orederedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
 
   const anecdotesToShow = orederedAnecdotes
-    .filter( (anecdote) => {
-      console.log('ane', anecdote)
-      return anecdote.content.toLowerCase().includes(filter.toLowerCase())
-    })
+    .filter(anecdote =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+
 
   return anecdotesToShow
 }
