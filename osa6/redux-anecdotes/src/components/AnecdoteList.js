@@ -34,8 +34,10 @@ const anecdotesToShow = ({ anecdotes, filter }) => {
   const orederedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
 
   const anecdotesToShow = orederedAnecdotes
-    .filter(anecdote =>
-      anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+    .filter( (anecdote) => {
+      console.log('ane', anecdote)
+      return anecdote.content.toLowerCase().includes(filter.toLowerCase())
+    })
 
   return anecdotesToShow
 }
