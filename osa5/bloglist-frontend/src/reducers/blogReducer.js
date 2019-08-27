@@ -1,7 +1,6 @@
 import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
-  console.log('action', action)
   switch (action.type) {
   case 'LIKE': {
     const id = action.data.id

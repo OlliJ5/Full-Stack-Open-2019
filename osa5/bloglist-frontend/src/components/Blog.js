@@ -59,6 +59,10 @@ const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
 
-
-export default connect(null, { likeBlog, deleteBlog })(Blog)
+export default connect(mapStateToProps, { likeBlog, deleteBlog })(Blog)
