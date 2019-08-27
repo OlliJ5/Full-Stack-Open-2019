@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
-import BlogForm from './components/blogForm'
+import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Blog from './components/Blog'
 import { useField } from './hooks'
+import { notificationChange } from './reducers/notificationReducer'
 
-const App = () => {
+const App = (props) => {
   const [blogs, setBlogs] = useState([])
 
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
 
   const titleField = useField('text')
   const authorField = useField('text')
@@ -52,14 +53,10 @@ const App = () => {
     try {
       const blog = await blogService.create(blogObject)
       setBlogs(blogs.concat(blog))
-      setMessage(`A new blog '${title}' by '${author}' added`)
+      props.notificationChange(`A new blog '${title}' by '${author}' added`, 5)
       titleField.reset()
       authorField.reset()
       urlField.reset()
-
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
 
     } catch (exception) {
       console.log('error occured', exception)
@@ -106,18 +103,13 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setMessage(`Welcome ${username}`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      props.notificationChange(`Welcome ${username}`, 5)
 
       usernameField.reset()
       passwordField.reset()
     } catch (exception) {
-      setMessage('Wrong username or password')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      props.notificationChange('Wrong username or password', 3)
+      console.log('error', exception)
       console.log('wrong credentials')
     }
   }
@@ -131,7 +123,7 @@ const App = () => {
     return (
       <div>
         <h2>Please login to the application</h2>
-        <Notification message={message} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -163,7 +155,7 @@ const App = () => {
         logout
       </button>
       <h2>Create a new blog</h2>
-      <Notification message={message} />
+      <Notification />
       <Togglable buttonLabel="add a blog">
         <BlogForm addBlog={addBlog}
           titleField={titleField.input}
@@ -179,4 +171,4 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(null, { notificationChange })(App)
