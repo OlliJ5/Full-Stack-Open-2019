@@ -32,7 +32,7 @@ const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
   return (
     <div>
       <div>
-        <h2>s{blog.title}</h2>
+        <h2>{blog.title}</h2>
         <p>Author: {blog.author}</p>
         <p>Url: <a href={blog.url}>{blog.url}</a></p>
         <p>likes: {blog.likes} <button onClick={() => likeABlog(blog)}>like</button></p>

@@ -5,10 +5,11 @@ import BlogList from './components/BlogList'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import Navigation from './components/Navigation'
 import { useField } from './hooks'
 import { notificationChange } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { logIn, logOut, keepUserLoggedIn } from './reducers/loginReducer'
+import { logIn, keepUserLoggedIn } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
@@ -47,10 +48,6 @@ const App = (props) => {
     }
   }
 
-  const handleLogout = () => {
-    props.logOut()
-  }
-
   const userById = (id) => {
     return props.users.find(user => user.id === id)
   }
@@ -83,13 +80,9 @@ const App = (props) => {
 
   return (
     <div>
-      <p>logged in as {props.user.name}</p>
-      <button
-        onClick={handleLogout}>
-        logout
-      </button>
       <Router>
         <div>
+          <Navigation />
           <Route exact path="/" render={() => <BlogList />} />
           <Route exact path="/users" render={() => <Users />} />
           <Route exact path="/users/:id" render={({ match }) =>
@@ -110,4 +103,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { notificationChange, initializeBlogs, logIn, logOut, keepUserLoggedIn, initializeUsers })(App)
+export default connect(mapStateToProps, { notificationChange, initializeBlogs, logIn, keepUserLoggedIn, initializeUsers })(App)
