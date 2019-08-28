@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
 const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
-  const [fullyVisible, setFullyVisible] = useState(false)
-
   const likeABlog = async (blog) => {
     const blogObject = { ...blog, likes: blog.likes + 1, user: blog.user.id ? blog.user.id : blog.user }
 
@@ -25,28 +23,16 @@ const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
     }
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-  if (fullyVisible === false) {
+  if (!blog) {
     return (
-      <div style={blogStyle} className='blog'>
-        <div className='clickable' onClick={() => setFullyVisible(true)}>
-          {blog.title} {blog.author}
-        </div>
-      </div>
+      null
     )
   }
 
   return (
-    <div style={blogStyle}>
-      <div onClick={() => setFullyVisible(false)}>
-        <p>Title: {blog.title}</p>
+    <div>
+      <div>
+        <h2>s{blog.title}</h2>
         <p>Author: {blog.author}</p>
         <p>Url: <a href={blog.url}>{blog.url}</a></p>
         <p>likes: {blog.likes} <button onClick={() => likeABlog(blog)}>like</button></p>

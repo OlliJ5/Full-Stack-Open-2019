@@ -7,13 +7,15 @@ import { Provider } from 'react-redux'
 import App from './App'
 import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
-import userReducer from './reducers/userReducer'
+import loginReducer from './reducers/loginReducer'
 import './index.css'
+import userReducer from './reducers/userReducer'
 
 const reducer = combineReducers({
   notification: notificationReducer,
   blogs: blogReducer,
-  user: userReducer
+  user: loginReducer,
+  users: userReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))
