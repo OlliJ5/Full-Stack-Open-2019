@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { notificationChange } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
 import { useField } from '../hooks'
+import { Form, Button } from 'semantic-ui-react'
 
 const BlogForm = (props) => {
   const titleField = useField('text')
@@ -32,27 +33,27 @@ const BlogForm = (props) => {
   }
 
   return (
-    <form onSubmit={addBlog}>
-      <div>
-        title
+    <Form onSubmit={addBlog}>
+      <Form.Field>
+        <label>Title</label>
         <input
           {...titleField.input}
         />
-      </div>
-      <div>
-        author
+      </Form.Field>
+      <Form.Field>
+        <label>Author</label>
         <input
           {...authorField.input}
         />
-      </div>
-      <div>
-        url
+      </Form.Field>
+      <Form.Field>
+        <label>Url</label>
         <input
           {...urlField.input}
         />
-      </div>
-      <button type="submit">create</button>
-    </form>
+      </Form.Field>
+      <Button type="submit">create</Button>
+    </Form>
   )
 }
 

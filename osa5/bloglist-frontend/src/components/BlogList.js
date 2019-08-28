@@ -4,18 +4,11 @@ import Notification from './Notification'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
 import { Link } from 'react-router-dom'
+import { Table } from 'semantic-ui-react'
 
 const BlogList = (props) => {
 
   const sortedBlogs = [...props.blogs].sort((a, b) => b.likes - a.likes)
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
 
   return (
     <div>
@@ -25,12 +18,22 @@ const BlogList = (props) => {
         <BlogForm />
       </Togglable>
 
-      <h2>blogs</h2>
-      {sortedBlogs.map(blog =>
-        <div key={blog.id} style={blogStyle} className='blog'>
-          <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
-        </div>
-      )}
+      <h2>Blogs</h2>
+      <div>
+        <Table striped celled>
+          <Table.Body>
+            {sortedBlogs.map(blog =>
+              <Table.Row key={blog.id}>
+                <Table.Cell>
+                  <Link to={`/blogs/${blog.id}`}>
+                    {blog.title} by {blog.author}
+                  </Link>
+                </Table.Cell>
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table>
+      </div>
     </div>
   )
 }

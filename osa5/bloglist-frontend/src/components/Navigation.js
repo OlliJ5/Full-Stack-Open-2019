@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { logOut } from '../reducers/loginReducer'
 import { Link } from 'react-router-dom'
+import { Menu, Button } from 'semantic-ui-react'
 
 const Navigation = (props) => {
 
@@ -11,13 +12,21 @@ const Navigation = (props) => {
 
   return (
     <div>
-      <Link style={{ padding: 5 }} to="/">Blogs</Link>
-      <Link style={{ padding: 5 }} to="/users">Users</Link>
-      logged in as {props.user.name}
-      <button
-        onClick={handleLogout}>
-        logout
-      </button>
+      <Menu inverted>
+        <Menu.Item link>
+          <Link style={{ padding: 5 }} to="/">Blogs</Link>
+        </Menu.Item>
+        <Menu.Item link>
+          <Link style={{ padding: 5 }} to="/users">Users</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <div style={{ paddingRight: 10 }}>logged in as {props.user.name}</div>
+          <Button
+            onClick={handleLogout}>
+            logout
+          </Button>
+        </Menu.Item>
+      </Menu>
     </div>
   )
 }

@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import Notification from './components/Notification'
 import BlogList from './components/BlogList'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
 import Navigation from './components/Navigation'
-import { useField } from './hooks'
-import { notificationChange } from './reducers/notificationReducer'
+import LoginForm from './components/LoginForm'
+import { Container } from 'semantic-ui-react'
 import { initializeBlogs } from './reducers/blogReducer'
-import { logIn, keepUserLoggedIn } from './reducers/loginReducer'
+import { keepUserLoggedIn } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 const App = (props) => {
-  const usernameField = useField('text')
-  const passwordField = useField('password')
-
   useEffect(() => {
     props.initializeBlogs()
   }, [])
@@ -33,21 +29,6 @@ const App = (props) => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const username = usernameField.input.value
-      const password = passwordField.input.value
-      await props.logIn(username, password)
-      props.notificationChange(`Welcome ${username}`, 5)
-
-      usernameField.reset()
-      passwordField.reset()
-    } catch (exception) {
-      props.notificationChange('Wrong username or password', 3)
-    }
-  }
-
   const userById = (id) => {
     return props.users.find(user => user.id === id)
   }
@@ -56,30 +37,15 @@ const App = (props) => {
 
   if (props.user === null) {
     return (
-      <div>
-        <h2>Please login to the application</h2>
-        <Notification />
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              {...usernameField.input}
-            />
-          </div>
-          <div>
-            password
-            <input
-              {...passwordField.input}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
+      <Container>
+        <LoginForm />
+      </Container>
     )
   }
 
+  console.log('rendering here')
   return (
-    <div>
+    <Container>
       <Router>
         <div>
           <Navigation />
@@ -91,7 +57,7 @@ const App = (props) => {
             <Blog blog={blogById(match.params.id)} />} />
         </div>
       </Router>
-    </div>
+    </Container>
   )
 }
 
@@ -103,4 +69,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { notificationChange, initializeBlogs, logIn, keepUserLoggedIn, initializeUsers })(App)
+export default connect(mapStateToProps, { initializeBlogs, keepUserLoggedIn, initializeUsers })(App)
