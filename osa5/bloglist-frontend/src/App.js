@@ -43,7 +43,6 @@ const App = (props) => {
     )
   }
 
-  console.log('rendering here')
   return (
     <Container>
       <Router>
