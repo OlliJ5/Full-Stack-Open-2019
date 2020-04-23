@@ -25,8 +25,8 @@ const CHANGE_YEAR_BORN = gql`
 `
 
 const Authors = (props) => {
-  const [name, setName] = useState('')
   const [born, setBorn] = useState(0)
+  const [selected, setSelected] = useState('')
 
   const [updateBirthYear] = useMutation(CHANGE_YEAR_BORN, {
     refetchQueries: [{ query: ALL_AUTHORS }]
@@ -40,16 +40,17 @@ const Authors = (props) => {
 
   const changeYearBorn = (event) => {
     event.preventDefault()
-    console.log('vuosi', born)
-    console.log('nimi', name)
 
-    updateBirthYear({ variables: { name, setBornTo: Number(born) } })
+    updateBirthYear({ variables: { name: selected, setBornTo: Number(born) } })
       .then(res => {
         console.log('päivitetty', res)
       })
 
-    setName('')
     setBorn(0)
+  }
+
+  const selectDropDown = (event) => {
+    setSelected(event.target.value)
   }
 
   return (
@@ -79,10 +80,11 @@ const Authors = (props) => {
       <form onSubmit={changeYearBorn}>
         <div>
           name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          <select value={selected} onChange={selectDropDown}>
+            {authors.data.allAuthors.map(a => 
+              <option key={a.name} value={a.name}>{a.name}</option>  
+            )}
+          </select>
         </div>
         <div>
           born
