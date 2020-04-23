@@ -54,8 +54,8 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    console.log('add book...')
-    console.log('typeof', typeof (published))
+    // console.log('add book...')
+    // console.log('typeof', typeof (published))
 
     createBook({ variables: { title, author, published: Number(published), genres } }).then(res =>{
       console.log('res', res)
