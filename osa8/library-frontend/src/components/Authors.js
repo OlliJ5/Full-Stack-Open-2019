@@ -8,6 +8,7 @@ const ALL_AUTHORS = gql`
       name
       born
       bookCount
+      id
     }
   }
 `
@@ -20,6 +21,7 @@ const CHANGE_YEAR_BORN = gql`
     ) {
       name
       born
+      id
     }
   }
 `
@@ -76,26 +78,30 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <h2>Set birthyear</h2>
-      <form onSubmit={changeYearBorn}>
+      {props.token && (
         <div>
-          name
+          <h2>Set birthyear</h2>
+          <form onSubmit={changeYearBorn}>
+            <div>
+              name
           <select value={selected} onChange={selectDropDown}>
-            {authors.data.allAuthors.map(a => 
-              <option key={a.name} value={a.name}>{a.name}</option>  
-            )}
-          </select>
-        </div>
-        <div>
-          born
+                {authors.data.allAuthors.map(a =>
+                  <option key={a.name} value={a.name}>{a.name}</option>
+                )}
+              </select>
+            </div>
+            <div>
+              born
           <input
-            value={born}
-            type='number'
-            onChange={({ target }) => setBorn(target.value)}
-          />
+                value={born}
+                type='number'
+                onChange={({ target }) => setBorn(target.value)}
+              />
+            </div>
+            <button type='submit'>change birthyear</button>
+          </form>
         </div>
-        <button type='submit'>change birthyear</button>
-      </form>
+      )}
     </div>
   )
 }

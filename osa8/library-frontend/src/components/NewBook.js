@@ -10,7 +10,9 @@ const CREATE_BOOK = gql`
       genres: $genres
     ) {
       title
-      author
+      author {
+        name
+      }
       published
       genres
     }
@@ -23,6 +25,7 @@ const ALL_AUTHORS = gql`
       name
       born
       bookCount
+      id
     }
   }
 `
@@ -30,8 +33,12 @@ const ALL_BOOKS = gql`
   query {
     allBooks {
       title
-      author
+      author {
+        name
+      }
       published
+      id
+      genres
     }
   }
 `
@@ -47,7 +54,7 @@ const NewBook = (props) => {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }]
   })
 
-  if (!props.show) {
+  if (!props.show || !props.token) {
     return null
   }
 
