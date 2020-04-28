@@ -5,7 +5,22 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription, gql } from '@apollo/client'
+
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+      }
+      published
+      id
+      genres
+    }
+  }
+  
+`
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -19,9 +34,15 @@ const App = () => {
     client.resetStore()
   }
 
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      window.alert(`New book '${subscriptionData.data.bookAdded.title}' added`)
+    }
+  })
+
   useEffect(() => {
     const storageToken = window.localStorage.getItem('library-user')
-    if(storageToken) {
+    if (storageToken) {
       setToken(storageToken)
     }
   }, [setToken])
@@ -38,10 +59,10 @@ const App = () => {
           <button onClick={() => setPage('recommend')}>Recommendations</button>
         )}
         {token && (
-          <button style={{float:'right'}} onClick={logout}>logout</button>
+          <button style={{ float: 'right' }} onClick={logout}>logout</button>
         )}
         {!token && (
-          <button style={{float:'right'}} onClick={() => setPage('login')} >login</button>
+          <button style={{ float: 'right' }} onClick={() => setPage('login')} >login</button>
         )}
       </div>
 
