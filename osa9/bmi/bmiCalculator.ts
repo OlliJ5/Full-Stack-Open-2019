@@ -1,4 +1,4 @@
-const calculateBmi = (height: number, mass: number): string => {
+export const calculateBmi = (height: number, mass: number): string => {
   const result: number = (mass) / ((height / 100) ^ 2);
   if (result < 15) {
     return 'Very severely underweight';
@@ -14,12 +14,12 @@ const calculateBmi = (height: number, mass: number): string => {
     return 'Obese Class I (Moderately obese)'
   } else if (35 <= result && result < 40) {
     return 'Obese Class II (Severely obese)';
-  } else if (result >= 40) {
+  } else {
     return 'Obese Class III (Very severely obese)';
   }
 }
 
-const parseArgument = (arg: string): number => {
+export const parseArgument = (arg: string): number => {
   if (!isNaN(Number(arg))) {
     return Number(arg)
   } else {
