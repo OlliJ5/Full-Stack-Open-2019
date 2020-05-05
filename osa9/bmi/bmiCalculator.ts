@@ -11,26 +11,26 @@ export const calculateBmi = (height: number, mass: number): string => {
   } else if (25 <= result && result < 30) {
     return 'Overweight';
   } else if (30 <= result && result < 35) {
-    return 'Obese Class I (Moderately obese)'
+    return 'Obese Class I (Moderately obese)';
   } else if (35 <= result && result < 40) {
     return 'Obese Class II (Severely obese)';
   } else {
     return 'Obese Class III (Very severely obese)';
   }
-}
+};
 
 export const parseArgument = (arg: string): number => {
   if (!isNaN(Number(arg))) {
-    return Number(arg)
+    return Number(arg);
   } else {
     throw new Error('Some value was not a number!');
   }
-}
+};
 
 try {
   const height: number = parseArgument(process.argv[2]);
   const mass: number = parseArgument(process.argv[3]);
   console.log(calculateBmi(height, mass));
 } catch(e) {
-  console.log('Something went wrong:', e.message)
+  console.log('Something went wrong:', e.message);
 }
