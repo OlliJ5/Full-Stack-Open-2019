@@ -5,6 +5,7 @@ import toNewPatient from '../utils';
 const patients: Patient[] = patientData.map(obj => {
   const object = toNewPatient(obj) as Patient;
   object.id = obj.id;
+  object.entries = [];
   return object;
 });
 
@@ -12,7 +13,7 @@ const getPatients = (): Patient[] => {
   return patients;
 };
 
-const getPatientsNonSensitive = (): Omit<Patient, 'ssn'>[] => {
+const getPatientsNonSensitive = (): Omit<Patient, 'ssn'|'entries'>[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -20,6 +21,11 @@ const getPatientsNonSensitive = (): Omit<Patient, 'ssn'>[] => {
     gender,
     occupation
   }));
+};
+
+const findById = (id: string): Patient | undefined => {
+  const patient = patients.find(p => p.id === id);
+  return patient;
 };
 
 const addPatient = (patient: NewPatient): Patient => {
@@ -35,5 +41,6 @@ const addPatient = (patient: NewPatient): Patient => {
 export default {
   getPatients,
   getPatientsNonSensitive,
-  addPatient
+  addPatient,
+  findById
 };
