@@ -1,14 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NewPatient, Gender } from './types';
-
-const toNewPatient = (object: any): NewPatient => {
-  return {
-    ssn: parseSsn(object.ssn),
-    name: parseName(object.name),
-    dateOfBirth: parseDateOfBirth(object.dateOfBirth),
-    gender: parseGender(object.gender),
-    occupation: parseOccupation(object.occupation)
-  }
-};
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -53,9 +44,19 @@ const parseOccupation = (occupation: any): string => {
 
 const parseGender = (gender: any): Gender => {
   if (!gender || !isGender(gender)) {
-    throw new Error('Incorrect or missing gender: ' + gender)
+    throw new Error('Incorrect or missing gender: ' + gender);
   }
   return gender;
+};
+
+const toNewPatient = (object: any): NewPatient => {
+  return {
+    ssn: parseSsn(object.ssn),
+    name: parseName(object.name),
+    dateOfBirth: parseDateOfBirth(object.dateOfBirth),
+    gender: parseGender(object.gender),
+    occupation: parseOccupation(object.occupation)
+  };
 };
 
 export default toNewPatient;
