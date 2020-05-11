@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NewPatient, Gender } from './types';
+import { NewPatient, Gender, Entry } from './types';
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -49,6 +49,16 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
+const parseEntries = (array: any[]): Entry[] => {
+  const properEntries: Entry[] = [];
+  array.map(entry => {
+    if(entry.type === "HealthCheck" || entry.type === "Hospital" || entry.type === "OccupationalHealthcare") {
+      properEntries.push(entry);
+    }
+  });
+  return properEntries;
+};
+
 const toNewPatient = (object: any): NewPatient => {
   return {
     ssn: parseSsn(object.ssn),
@@ -56,7 +66,7 @@ const toNewPatient = (object: any): NewPatient => {
     dateOfBirth: parseDateOfBirth(object.dateOfBirth),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
-    entries: []
+    entries: parseEntries(object.entries)
   };
 };
 
