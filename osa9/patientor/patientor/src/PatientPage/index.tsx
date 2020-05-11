@@ -5,10 +5,34 @@ import axios from "axios";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import Entry from "./Entry";
+import { Modal, Button } from "semantic-ui-react";
+import AddEntryForm from "./AddEntryForm";
+import { EntryFormValues } from "./AddEntryForm";
 
 const PatientPage: React.FC = () => {
   const [{ patient, diagnoses }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+  };
+
+  const submitEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: updatedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      console.log('päivitetty', updatedPatient);
+      closeModal();
+      dispatch(setPatient(updatedPatient));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   React.useEffect(() => {
     const fetchPatientInfo = async () => {
@@ -38,9 +62,16 @@ const PatientPage: React.FC = () => {
       <h3>Entries</h3>
       {patient.entries && (
         patient.entries.map(entry => (
-          <Entry key={entry.id} entry={entry} diagnoses={diagnoses}/>
+          <Entry key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))
       )}
+      <Modal open={modalOpen} onClose={closeModal} centered={false} closeIcon>
+        <Modal.Header>Add an entry</Modal.Header>
+        <Modal.Content>
+          <AddEntryForm onSubmit={submitEntry} onCancel={closeModal} />
+        </Modal.Content>
+      </Modal>
+      <Button onClick={() => openModal()}>Add entry</Button>
     </div>
   );
 };

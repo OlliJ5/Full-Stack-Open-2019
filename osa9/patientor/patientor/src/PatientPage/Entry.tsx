@@ -4,10 +4,10 @@ import { Entry, Diagnosis } from "../types";
 const assertNever = (value: never): never => {
   throw new Error(
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  )
-}
+  );
+};
 
-const HealthCheckEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
+const HealthCheckEntry: React.FC<{ entry: Entry; diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
   return (
     <div key={entry.id}>
       <p>{entry.date}: {entry.description}</p>
@@ -21,10 +21,10 @@ const HealthCheckEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: Di
         )}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-const HospitalEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
+const HospitalEntry: React.FC<{ entry: Entry; diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
   return (
     <div key={entry.id}>
       <p>{entry.date}: {entry.description}</p>
@@ -38,10 +38,10 @@ const HospitalEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: Diagn
         )}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-const OccupationalEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
+const OccupationalEntry: React.FC<{ entry: Entry; diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
   return (
     <div key={entry.id}>
       <p>{entry.date}: {entry.description}</p>
@@ -55,19 +55,19 @@ const OccupationalEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: D
         )}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-const VisitEntry: React.FC<{ entry: Entry, diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
+const VisitEntry: React.FC<{ entry: Entry; diagnoses: { [code: string]: Diagnosis } }> = ({ entry, diagnoses }) => {
   switch (entry.type) {
     case "HealthCheck":
-      return <HealthCheckEntry entry={entry} diagnoses={diagnoses} />
+      return <HealthCheckEntry entry={entry} diagnoses={diagnoses} />;
     case "Hospital":
-      return <HospitalEntry entry={entry} diagnoses={diagnoses} />
+      return <HospitalEntry entry={entry} diagnoses={diagnoses} />;
     case "OccupationalHealthcare":
-      return <OccupationalEntry entry={entry} diagnoses={diagnoses} />
+      return <OccupationalEntry entry={entry} diagnoses={diagnoses} />;
     default:
-      return assertNever(entry)
+      return assertNever(entry);
   }
 };
 

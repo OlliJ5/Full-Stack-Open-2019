@@ -49,10 +49,10 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
-const parseEntries = (array: any[]): Entry[] => {
+export const parseEntries = (array: any[]): Entry[] => {
   const properEntries: Entry[] = [];
   array.map(entry => {
-    if(entry.type === "HealthCheck" || entry.type === "Hospital" || entry.type === "OccupationalHealthcare") {
+    if (entry.type === "HealthCheck" || entry.type === "Hospital" || entry.type === "OccupationalHealthcare") {
       properEntries.push(entry);
     }
   });

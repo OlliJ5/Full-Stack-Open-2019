@@ -1,8 +1,8 @@
 import patientData from '../../data/patients';
-import { Patient, NewPatient } from '../types';
-import toNewPatient from '../utils';
+import { Patient, NewPatient, Entry } from '../types';
+import toNewPatient, { parseEntries } from '../utils';
 
-const patients: Patient[] = patientData.map(obj => {
+let patients: Patient[] = patientData.map(obj => {
   const object = toNewPatient(obj) as Patient;
   object.id = obj.id;
   return object;
@@ -12,7 +12,7 @@ const getPatients = (): Patient[] => {
   return patients;
 };
 
-const getPatientsNonSensitive = (): Omit<Patient, 'ssn'|'entries'>[] => {
+const getPatientsNonSensitive = (): Omit<Patient, 'ssn' | 'entries'>[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -37,9 +37,25 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
+const addPatientEntry = (id: string, entry: Entry): Patient | undefined => {
+  const patient = findById(id);
+  if (patient) {
+    const updatedEntries = patient.entries.concat({ ...entry, id: String(Date.now()) });
+
+    const updatedPatient = {
+      ...patient,
+      entries: parseEntries(updatedEntries)
+    };
+    patients = patients.map(patient => patient.id === id ? updatedPatient : patient);
+    return updatedPatient;
+  }
+  return patient;
+};
+
 export default {
   getPatients,
   getPatientsNonSensitive,
   addPatient,
-  findById
+  findById,
+  addPatientEntry
 };
